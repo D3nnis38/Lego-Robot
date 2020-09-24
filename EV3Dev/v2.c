@@ -14,6 +14,7 @@
 int check_for_parts();
 void find_wall();
 void get_distance();
+void turn_wheels(float, float);
 int max_hastighet; /* variabel för max hastighet på motorn */
 
 POOL_T gyroSensor;
@@ -38,8 +39,8 @@ int main(void)
     Sleep(3000);
     tacho_stop(MOTOR_BOTH);
     */
-    //find_wall();
-    get_distance();
+    find_wall();
+    //get_distance();
     brick_uninit();
     printf("dying...\n");
     return (0);
@@ -84,30 +85,31 @@ int check_for_parts()
 
 void find_wall()
 {
-    tacho_set_speed_sp(MOTOR_LEFT, max_hastighet * 0.25);
-    tacho_set_speed_sp(MOTOR_RIGHT, max_hastighet * -0.25);
-
     float shortest_distance = 999999;
     float shortest_degree;
-    gyroValue0 = sensor_get_value(0, gyroSensor, 0);
-    gyroValue1 = sensor_get_value(1, gyroSensor, 0);
-    while (gyroValue0 < 360)
+    sensor_set_mode(gyroSensor, LEGO_EV3_GYRO_GYRO_G_AND_A);
+    while (sensor_get_value(0, gyroSensor, 0) < 360)
     {
-        gyroValue0 = sensor_get_value(0, gyroSensor, 0);
-        gyroValue1 = sensor_get_value(1, gyroSensor, 0);
-        printf("Gyro0: %d , Gyro1: %d \n", gyroValue0, gyroValue1);
-        tacho_run_forever(MOTOR_LEFT);
-        tacho_run_forever(MOTOR_RIGHT);
+        printf("Gyro0: %d \n", sensor_get_value(0, gyroSensor, 0));
+        turn_wheels(0.25, -0.25);
     }
-    sleep(500);
 
     tacho_stop(MOTOR_BOTH);
 }
+
 void get_distance()
 {
+    int distance;
     while (sensor_get_value(0, sonicSensor, 0) > 10)
     {
-        sensor_get_value(0, sonicSensor, 0);
-        printf("Distance: %d\n", sensor_get_value(0, sonicSensor, 0));
+        distance = sensor_get_value(0, sonicSensor, 0) / 10;
+        printf("Distance: %d\n", distance);
     }
+}
+
+void turn_wheels(float speedLeft, float speedRight)
+{
+    tacho_set_speed_sp(MOTOR_LEFT, max_hastighet * speedLeft);
+    tacho_set_speed_sp(MOTOR_RIGHT, max_hastighet * speedRight);
+    tacho_run_forever(MOTOR_BOTH);
 }
