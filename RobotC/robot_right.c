@@ -96,11 +96,4 @@ task main(){
 	while(getMotorEncoder(arm) > 0){
 		setMotorSpeed(arm, -80);
 	}
-	/*setMotorSpeed(left, 0);
-	setMotorSpeed(right, 0);
-	setMotorSpeed(arm, 80);
-	sleep(1000);
-	setMotorSpeed(arm, -80);
-	sleep(950);
-	setMotorSpeed(arm, 0);*/
 }
