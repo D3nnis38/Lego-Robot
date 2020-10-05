@@ -56,7 +56,7 @@ task main(){
 	if(wall == true){
 		go_to_wall();
 
-		while(getGyroDegrees(gyro) <= 85){
+		while(getGyroDegrees(gyro) <= 260){
 			setMotorSpeed(left, 25);
 			setMotorSpeed(right, -25);
 			displayBigTextLine(0, "%d", getGyroDegrees(gyro));
@@ -80,15 +80,7 @@ task main(){
 			}
 		}
 		resetGyro(gyro);
-		wall = false;
-		wall = find_wall();
-		if(wall == true){
-			go_to_wall();
-		}else{
-			displayBigStringAt(0, 16, "NO WALL FOUND!");
-		}
-		resetGyro(gyro);
-		while(getGyroDegrees(gyro) < 180){
+		while(getGyroDegrees(gyro) < 260){
 			setMotorSpeed(left, 25);
 			setMotorSpeed(right, -25);
 		}
